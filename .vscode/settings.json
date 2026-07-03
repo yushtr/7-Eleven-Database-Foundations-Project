@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true
+                }
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "connectString": "postgresql://db_7_11_database_project_user:fWYIVuWgF5YB7EVjfk5ToKxhLTiNzEXv@dpg-d93o20mq1p3s73a08gog-a.oregon-postgres.render.com/db_7_11_database_project",
+            "name": "7-11 Database Project"
+        }
+    ]
+}
