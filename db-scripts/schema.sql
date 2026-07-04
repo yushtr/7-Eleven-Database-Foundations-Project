@@ -59,6 +59,19 @@ CREATE TABLE suppliers (
         PRIMARY KEY (supplier_id)
 );
 
+CREATE TABLE orders (
+    order_id SERIAL NOT NULL, 
+    store_id INT NOT NULL, 
+    product_id INT NOT NULL, 
+        PRIMARY KEY (order_id), 
+        CONSTRAINT fk_orders_store_id
+            FOREIGN KEY(store_id)
+            REFERENCES branches(store_id), 
+        CONSTRAINT fk_orders_product_id
+            FOREIGN KEY(product_id)
+            REFERENCES products(product_id)
+);
+
 CREATE TABLE deliveries ( 
     delivery_id SERIAL NOT NULL, 
     store_id INT NOT NULL, 

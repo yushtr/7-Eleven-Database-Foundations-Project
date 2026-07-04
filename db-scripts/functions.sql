@@ -6,3 +6,20 @@ FROM sales_transactions
 WHERE store_id = $1 
     AND transaction_date BETWEEN $2 AND $3
 $$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION fn_get_branch_expenses(target_store_id INT, start_date DATE, end_date DATE)
+RETURNS DECIMAL(15,2) AS 
+$$ 
+SELECT COALESCE(SUM(amount), 0.00) AS expense
+FROM store_expenses
+WHERE store_id = $1 
+    AND expense_date BETWEEN $2 AND $3
+$$ LANGUAGE SQL; 
+
+CREATE OR REPLACE FUNCTION fn_get_branch_profits(target_store_id INT, start_date DATE, end_date DATE) 
+RETURNS DECIMAL(15,2) AS 
+$$ 
+SELECT fn_get_branch_revenue($1, $2, $3) - fn_get_branch_expenses($1, $2, $3)
+$$ LANGUAGE SQL; 
+
+
