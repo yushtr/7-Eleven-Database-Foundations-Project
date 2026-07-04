@@ -6,6 +6,36 @@ DROP TABLE IF EXISTS all_members CASCADE;
 DROP TABLE IF EXISTS sales_transactions CASCADE; 
 DROP TABLE IF EXISTS transaction_items CASCADE; 
 DROP TABLE IF EXISTS store_expenses CASCADE; 
+DROP TABLE IF EXISTS branches CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS employees CASCADE;
+DROP TABLE IF EXISTS worker_shifts CASCADE;
+
+CREATE TABLE branches ( 
+    store_id SERIAL NOT NULL, 
+    branch_name VARCHAR NOT NULL, 
+    address VARCHAR NOT NULL,
+        PRIMARY KEY (store_id)
+);
+
+CREATE TABLE categories ( 
+    category_id SERIAL NOT NULL, 
+    category_name VARCHAR NOT NULL, 
+    subcategory_name VARCHAR NOT NULL,
+        PRIMARY KEY (category_id)
+);
+
+CREATE TABLE products ( 
+    product_id SERIAL NOT NULL,
+    category_id INT NOT NULL, 
+    product_name VARCHAR NOT NULL, 
+    price DECIMAL(5, 2) NOT NULL,
+        PRIMARY KEY (product_id),
+        CONSTRAINT fk_products_category_id 
+            FOREIGN KEY(category_id)
+            REFERENCES categories(category_id)
+);
 
 CREATE TABLE store_inventory ( 
     store_id INT NOT NULL,
@@ -37,7 +67,13 @@ CREATE TABLE deliveries (
     driver_name VARCHAR NOT NULL, 
     driver_phone VARCHAR NOT NULL,
     license_plate VARCHAR NOT NULL,
-        PRIMARY KEY (delivery_id)
+        PRIMARY KEY (delivery_id), 
+        CONSTRAINT fk_deliveries_store_id
+            FOREIGN KEY(store_id)
+            REFERENCES branches(store_id), 
+        CONSTRAINT fk_deliveries_supplier_id
+            FOREIGN KEY(supplier_id)
+            REFERENCES suppliers(supplier_id)
 );
 
 CREATE TABLE delivery_items (
@@ -75,7 +111,10 @@ CREATE TABLE sales_transactions (
             REFERENCES branches(store_id), 
         CONSTRAINT fk_sales_transactions_member_id
             FOREIGN KEY(member_id)
-            REFERENCES all_members(member_id)
+            REFERENCES all_members(member_id),
+        CONSTRAINT fk_sales_transactions_employee_id
+            FOREIGN KEY(employee_id)
+            REFERENCES employees(employee_id)
 );
 
 CREATE TABLE transaction_items (
@@ -101,6 +140,33 @@ CREATE TABLE store_expenses (
     expense_date DATE NOT NULL,
         PRIMARY KEY (expense_id),
         CONSTRAINT fk_store_expenses_store_id
+            FOREIGN KEY(store_id)
+            REFERENCES branches(store_id)
+);
+
+CREATE TABLE employees (
+    employee_id SERIAL NOT NULL, 
+    store_id INT NOT NULL, 
+    employee_name VARCHAR NOT NULL, 
+    role_type VARCHAR NOT NULL, 
+        PRIMARY KEY (employee_id), 
+        CONSTRAINT fk_employees_store_id
+            FOREIGN KEY(store_id)
+            REFERENCES branches(store_id)
+);
+
+CREATE TABLE worker_shifts (
+    shift_id SERIAL NOT NULL, 
+    employee_id INT NOT NULL, 
+    store_id INT NOT NULL, 
+    clock_in TIMESTAMPTZ NOT NULL, 
+    clock_out TIMESTAMPTZ NOT NULL, 
+    shift_status VARCHAR NOT NULL, 
+        PRIMARY KEY (shift_id), 
+        CONSTRAINT fk_worker_shifts_employee_id
+            FOREIGN KEY(employee_id)
+            REFERENCES employees(employee_id), 
+        CONSTRAINT fk_worker_shifts_store_id
             FOREIGN KEY(store_id)
             REFERENCES branches(store_id)
 );
