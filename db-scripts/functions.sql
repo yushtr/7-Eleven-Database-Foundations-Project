@@ -30,3 +30,5 @@ FROM store_inventory
 WHERE store_id = $1
     AND expiration_date <= CURRENT_DATE;
 $$ LANGUAGE SQL; 
+
+
