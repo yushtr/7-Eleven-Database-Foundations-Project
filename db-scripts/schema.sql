@@ -63,6 +63,8 @@ CREATE TABLE orders (
     order_id SERIAL NOT NULL, 
     store_id INT NOT NULL, 
     product_id INT NOT NULL, 
+    order_date DATE NOT NULL DEFAULT CURRENT_DATE, 
+    quantity INT NOT NULL DEFAULT 100,
         PRIMARY KEY (order_id), 
         CONSTRAINT fk_orders_store_id
             FOREIGN KEY(store_id)
