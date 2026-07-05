@@ -11,3 +11,14 @@ JOIN products AS p USING (product_id)
 JOIN categories AS c USING (category_id)
 JOIN deliveries AS d USING (delivery_id);
 
+CREATE VIEW cashier_sales_view AS 
+SELECT 
+    s.transaction_id, s.transaction_date, s.payment_method, s.total_amount, s.member_id, a.phone_number, a.points_balance, p.product_id, p.product_name, p.price, t.quantity,c.category_id, c.category_name, c.subcategory_name
+FROM sales_transactions AS s
+JOIN transaction_items AS t USING (transaction_id)
+LEFT JOIN all_members AS a USING (member_id)
+JOIN products AS p USING (product_id)
+JOIN categories AS c USING (category_id);
+
+
+
