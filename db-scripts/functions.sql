@@ -22,4 +22,17 @@ $$
 SELECT fn_get_branch_revenue($1, $2, $3) - fn_get_branch_expenses($1, $2, $3)
 $$ LANGUAGE SQL; 
 
+CREATE OR REPLACE FUNCTION fn_check_expired_products(target_store_id INT, current_date DATE) 
+RETURNS SETOF store_inventory AS 
+$$
+SELECT product_id, stock_quantity
+FROM store_inventory
+WHERE store_id = $1
+    AND DATE = $2
+$$ LANGUAGE SQL; 
 
+CREATE OR REPLACE FUNCTION fn_check_expired_products_relation_display(target_store_id INT, current_date DATE)
+RETURNS SETOF store_inventory AS 
+$$
+SELECT (fn_check_expired_products($1, $2)).*
+$$ LANGUAGE SQL;
