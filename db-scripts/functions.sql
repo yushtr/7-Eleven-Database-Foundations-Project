@@ -19,7 +19,7 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION fn_get_branch_profits(target_store_id INT, start_date DATE, end_date DATE) 
 RETURNS DECIMAL(15,2) AS 
 $$ 
-SELECT fn_get_branch_revenue($1, $2, $3) - fn_get_branch_expenses($1, $2, $3);
+SELECT COALESCE(fn_get_branch_revenue($1, $2, $3), 0.00) - COALESCE(fn_get_branch_expenses($1, $2, $3), 0.00);
 $$ LANGUAGE SQL; 
 
 CREATE OR REPLACE FUNCTION fn_check_expired_products(target_store_id INT) 
@@ -28,7 +28,8 @@ $$
 SELECT *
 FROM store_inventory
 WHERE store_id = $1
-    AND expiration_date <= CURRENT_DATE;
+    AND expiration_date <= CURRENT_DATE
+    AND stock_quantity > 0;
 $$ LANGUAGE SQL; 
 
 
