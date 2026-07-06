@@ -1,3 +1,9 @@
+DROP TRIGGER IF EXISTS trg_price_audit ON products;
+DROP TRIGGER IF EXISTS trg_deleted_product_audit ON products;
+DROP TRIGGER IF EXISTS trg_expenses_audit ON store_expenses;
+DROP TRIGGER IF EXISTS trg_transaction_audit ON sales_transactions;
+
+
 CREATE TRIGGER trg_price_audit
     AFTER UPDATE OF price
     ON products 

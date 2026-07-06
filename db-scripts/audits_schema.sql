@@ -1,5 +1,7 @@
 DROP TABLE IF EXISTS price_history_audit CASCADE; 
 DROP TABLE IF EXISTS deleted_products_audit CASCADE;
+DROP TABLE IF EXISTS expenses_audit CASCADE;
+DROP TABLE IF EXISTS transaction_audit CASCADE;
 
 CREATE TABLE price_history_audit ( 
     audit_id SERIAL NOT NULL, 

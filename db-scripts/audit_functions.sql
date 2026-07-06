@@ -1,3 +1,8 @@
+DROP FUNCTION IF EXISTS fn_price_audit(); 
+DROP FUNCTION IF EXISTS fn_deleted_product_audit(); 
+DROP FUNCTION IF EXISTS fn_expenses_audit(); 
+DROP FUNCTION IF EXISTS fn_transaction_audit(); 
+
 CREATE OR REPLACE FUNCTION fn_price_audit()
 RETURNS TRIGGER AS
 $$ 
