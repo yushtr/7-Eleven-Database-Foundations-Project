@@ -1,3 +1,24 @@
+-- the core :
+
+CREATE OR REPLACE FUNCTION fn_search_products(keyword TEXT)
+RETURNS SETOF products AS
+$$
+SELECT *
+FROM products
+WHERE LOWER(product_name) LIKE LOWER('%' || $1 || '%');
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION fn_get_branch_inventory_value(target_store_id INT)
+RETURNS DECIMAL(15,2) AS
+$$
+SELECT COALESCE(SUM(stock_quantity * price), 0.00)
+FROM store_inventory
+JOIN products USING (product_id)
+WHERE store_id = $1;
+$$ LANGUAGE SQL;
+
+-- inventory and supplier logistics :
+
 CREATE OR REPLACE FUNCTION fn_get_branch_revenue(target_store_id INT, start_date DATE, end_date DATE) 
 RETURNS DECIMAL(15,2) AS 
 $$ 
@@ -46,3 +67,42 @@ BEGIN
     RETURN new_stock; 
 END;
 $$ LANGUAGE plpgsql; 
+
+-- workforce management : 
+
+CREATE OR REPLACE FUNCTION fn_get_employee_schedule(target_employee_id INT)
+RETURNS SETOF worker_shifts AS
+$$
+SELECT *
+FROM worker_shifts
+WHERE employee_id = $1
+ORDER BY clock_in DESC;
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION fn_get_active_staff(target_store_id INT)
+RETURNS TABLE (
+    employee_name VARCHAR,
+    role_type VARCHAR,
+    clock_in TIMESTAMPTZ
+) AS
+$$
+SELECT employee_name, role_type, clock_in
+FROM employees
+JOIN worker_shifts USING (employee_id)
+WHERE store_id = $1
+    AND clock_in IS NOT NULL
+    AND clock_out IS NULL;
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION fn_get_shift_hours(target_employee_id INT, start_date DATE, end_date DATE)
+RETURNS DECIMAL(10,2) AS
+$$
+SELECT COALESCE(
+    SUM(EXTRACT(EPOCH FROM (clock_out - clock_in)) / 3600),
+    0.00
+)
+FROM worker_shifts
+WHERE employee_id = $1
+    AND DATE(clock_in) BETWEEN $2 AND $3
+    AND clock_out IS NOT NULL;
+$$ LANGUAGE SQL;
