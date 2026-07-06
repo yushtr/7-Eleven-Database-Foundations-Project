@@ -11,7 +11,10 @@ CREATE TABLE price_history_audit (
     changed_by TEXT NOT NULL,
     change_time TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     change_date DATE NOT NULL DEFAULT CURRENT_DATE, 
-        PRIMARY KEY (audit_id)
+        PRIMARY KEY (audit_id),
+        CONSTRAINT fk_price_history_audit
+            FOREIGN KEY(product_id)
+            REFERENCES products(product_id)
 );
 
 CREATE TABLE deleted_products_audit ( 
@@ -31,7 +34,10 @@ CREATE TABLE expenses_audit (
     changed_by TEXT NOT NULL, 
     change_time TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     change_date DATE NOT NULL DEFAULT CURRENT_DATE, 
-        PRIMARY KEY (audit_id)
+        PRIMARY KEY (audit_id),
+        CONSTRAINT fk_expenses_audit
+            FOREIGN KEY(expense_id)
+            REFERENCES store_expenses(expense_id)
 );
 
 CREATE TABLE transaction_audit ( 
@@ -42,5 +48,8 @@ CREATE TABLE transaction_audit (
     changed_by TEXT NOT NULL, 
     change_time TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     change_date DATE NOT NULL DEFAULT CURRENT_DATE, 
-        PRIMARY KEY (audit_id)
+        PRIMARY KEY (audit_id),
+        CONSTRAINT fk_transaction_audit
+            FOREIGN KEY(transaction_id)
+            REFERENCES sales_transactions(transaction_id)
 );
