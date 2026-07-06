@@ -32,3 +32,17 @@ WHERE store_id = $1
     AND stock_quantity > 0;
 $$ LANGUAGE SQL; 
 
+CREATE OR REPLACE FUNCTION fn_update_stock(product_id INT, quantity_sold INT) 
+RETURNS INT AS 
+$$ 
+DECLARE 
+    new_stock INT; 
+BEGIN 
+    UPDATE store_inventory
+    SET stock_quantity = stock_quantity - $2
+    WHERE product_id = $1
+    RETURNING stock_quantity INTO new_stock;
+
+    RETURN new_stock; 
+END;
+$$ LANGUAGE plpgsql; 
