@@ -1,11 +1,23 @@
 -- the core :
 
-CREATE OR REPLACE FUNCTION fn_search_products(keyword TEXT)
-RETURNS SETOF products AS
+CREATE OR REPLACE FUNCTION fn_search_available_products(target_store_id INT, keyword TEXT)
+RETURNS TABLE (
+    product_id INT,
+    product_name VARCHAR,
+    stock_quantity INT,
+    price DECIMAL
+) AS
 $$
-SELECT *
-FROM products
-WHERE LOWER(product_name) LIKE LOWER('%' || $1 || '%');
+SELECT
+    product_id,
+    product_name,
+    stock_quantity,
+    price
+FROM store_inventory
+JOIN products USING (product_id)
+WHERE store_id = target_store_id
+    AND stock_quantity > 0
+    AND LOWER(product_name) LIKE LOWER('%' || keyword || '%');
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION fn_get_branch_inventory_value(target_store_id INT)
