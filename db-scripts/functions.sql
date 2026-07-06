@@ -32,5 +32,3 @@ WHERE store_id = $1
     AND stock_quantity > 0;
 $$ LANGUAGE SQL; 
 
-
-
