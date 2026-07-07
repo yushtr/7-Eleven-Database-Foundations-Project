@@ -65,18 +65,15 @@ WHERE store_id = $1
     AND stock_quantity > 0;
 $$ LANGUAGE SQL; 
 
-CREATE OR REPLACE FUNCTION fn_update_stock(product_id INT, quantity_sold INT) 
-RETURNS INT AS 
+CREATE OR REPLACE FUNCTION fn_update_stock()
+RETURNS TRIGGER AS 
 $$ 
-DECLARE 
-    new_stock INT; 
 BEGIN 
     UPDATE store_inventory
-    SET stock_quantity = stock_quantity - $2
-    WHERE product_id = $1
-    RETURNING stock_quantity INTO new_stock;
+    SET stock_quantity = stock_quantity - NEW.quantity
+    WHERE product_id = NEW.product_id;
 
-    RETURN new_stock; 
+    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql; 
 
