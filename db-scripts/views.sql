@@ -40,3 +40,15 @@ CREATE VIEW manager_daily_net_profit AS
 SELECT (f.day_revenue - e.day_expense) AS day_net_profit, f.sales_date AS net_profit_date
 FROM manager_daily_expenses AS e
 JOIN manager_daily_financials AS f ON f.sales_date = e.expense_date;
+
+CREATE VIEW branch_product_summary_view AS
+SELECT b.store_id, b.branch_name, COUNT(s.product_id) AS number_of_products, COALESCE(SUM(s.stock_quantity), 0) AS total_stock_quantity
+FROM branches AS b
+LEFT JOIN store_inventory AS s USING (store_id)
+GROUP BY b.store_id, b.branch_name;
+
+CREATE VIEW member_purchase_summary_view AS
+SELECT a.member_id, a.phone_number, a.points_balance, COUNT(s.transaction_id) AS total_transactions, COALESCE(SUM(s.total_amount), 0.00) AS total_spent
+FROM all_members AS a
+LEFT JOIN sales_transactions AS s USING (member_id)
+GROUP BY a.member_id, a.phone_number, a.points_balance;
