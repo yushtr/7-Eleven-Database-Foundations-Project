@@ -14,6 +14,7 @@ A PostgreSQL database designed to support the daily operations of a multi-branch
 
 ## Project Structure
 
+```text
 ├── README.md
 ├── db-scripts
 │   ├── audit_functions.sql
@@ -25,6 +26,7 @@ A PostgreSQL database designed to support the daily operations of a multi-branch
 │   ├── triggers.sql
 │   └── views.sql
 └── documentation
+```
 
 (will come back to add more later)
 
