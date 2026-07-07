@@ -52,3 +52,21 @@ SELECT a.member_id, a.phone_number, a.points_balance, COUNT(s.transaction_id) AS
 FROM all_members AS a
 LEFT JOIN sales_transactions AS s USING (member_id)
 GROUP BY a.member_id, a.phone_number, a.points_balance;
+
+CREATE VIEW employee_shift_summary_view AS
+SELECT e.employee_id, e.employee_name, e.role_type, w.clock_in, w.clock_out, COALESCE(ROUND(EXTRACT(EPOCH FROM (w.clock_out - w.clock_in)) / 3600, 2), 0.00) AS hours_worked
+FROM employees AS e
+JOIN worker_shifts AS w USING (employee_id);
+
+CREATE VIEW active_staff_view AS
+SELECT e.store_id, e.employee_id, e.employee_name, e.role_type, w.clock_in
+FROM employees AS e
+JOIN worker_shifts AS w USING (employee_id)
+WHERE w.clock_in IS NOT NULL
+    AND w.clock_out IS NULL;
+
+CREATE VIEW branch_staff_summary_view AS
+SELECT b.store_id, b.branch_name, e.role_type, COUNT(e.employee_id) AS number_of_staff
+FROM branches AS b
+LEFT JOIN employees AS e USING (store_id)
+GROUP BY b.store_id, b.branch_name, e.role_type;
