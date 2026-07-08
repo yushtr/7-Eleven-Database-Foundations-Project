@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS orders CASCADE;
 DROP TABLE IF EXISTS store_inventory CASCADE; 
 DROP TABLE IF EXISTS suppliers CASCADE; 
 DROP TABLE IF EXISTS deliveries CASCADE; 
@@ -112,6 +113,17 @@ CREATE TABLE all_members (
         PRIMARY KEY (member_id)
 ); 
 
+CREATE TABLE employees (
+    employee_id SERIAL NOT NULL, 
+    store_id INT NOT NULL, 
+    employee_name VARCHAR NOT NULL, 
+    role_type VARCHAR NOT NULL, 
+        PRIMARY KEY (employee_id), 
+        CONSTRAINT fk_employees_store_id
+            FOREIGN KEY(store_id)
+            REFERENCES branches(store_id)
+);
+
 CREATE TABLE sales_transactions ( 
     transaction_id SERIAL, 
     store_id INT NOT NULL, 
@@ -155,17 +167,6 @@ CREATE TABLE store_expenses (
     expense_date DATE NOT NULL,
         PRIMARY KEY (expense_id),
         CONSTRAINT fk_store_expenses_store_id
-            FOREIGN KEY(store_id)
-            REFERENCES branches(store_id)
-);
-
-CREATE TABLE employees (
-    employee_id SERIAL NOT NULL, 
-    store_id INT NOT NULL, 
-    employee_name VARCHAR NOT NULL, 
-    role_type VARCHAR NOT NULL, 
-        PRIMARY KEY (employee_id), 
-        CONSTRAINT fk_employees_store_id
             FOREIGN KEY(store_id)
             REFERENCES branches(store_id)
 );
