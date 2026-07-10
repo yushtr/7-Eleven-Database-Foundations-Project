@@ -147,7 +147,7 @@ CREATE TABLE employees (
         PRIMARY KEY (employee_id), 
         CONSTRAINT fk_employees_store_id
             FOREIGN KEY(store_id)
-            REFERENCES branches(store_id)
+            REFERENCES branches(store_id),
         CONSTRAINT chk_employee_name_not_empty CHECK (length(btrim(employee_name)) > 0),
         CONSTRAINT chk_valid_role_type CHECK (role_type IN ('CASHIER', 'RESTOCKER', 'JANITOR', 'SECURITY', 'MANAGER'))
 );
@@ -156,7 +156,7 @@ CREATE TABLE sales_transactions (
     transaction_id SERIAL, 
     store_id INT NOT NULL, 
     member_id INT, --allows null--
-    phone_number VARCHAR --allows null--
+    phone_number VARCHAR, --allows null--
     employee_id INT NOT NULL, 
     total_amount DECIMAL(10, 2) NOT NULL, 
     transaction_date TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP, 
@@ -181,7 +181,7 @@ CREATE TABLE transaction_items (
     product_id INT NOT NULL, 
     expiration_date DATE NOT NULL,
     quantity INT NOT NULL, 
-    unit_price DECIMAL(5, 2) NOT NULL, 
+    unit_price DECIMAL(10, 2) NOT NULL, 
         PRIMARY KEY (transaction_id, product_id, expiration_date), 
         CONSTRAINT fk_transaction_items_transaction_id 
             FOREIGN KEY(transaction_id)
@@ -190,7 +190,7 @@ CREATE TABLE transaction_items (
             FOREIGN KEY(product_id)
             REFERENCES products(product_id),
         CONSTRAINT chk_positive_quantity CHECK (quantity > 0),
-        CONSTRAINT chk_positive_unit_price CHECK (unit_price > 0),
+        CONSTRAINT chk_positive_unit_price CHECK (unit_price > 0)
 );
 
 CREATE TABLE store_expenses ( 
