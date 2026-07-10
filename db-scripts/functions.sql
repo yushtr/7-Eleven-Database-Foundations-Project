@@ -70,10 +70,47 @@ CREATE OR REPLACE FUNCTION fn_update_stock()
 RETURNS TRIGGER AS 
 $$ 
 BEGIN 
-    UPDATE store_inventory AS si
-    SET stock_quantity = si.stock_quantity - NEW.quantity
-    WHERE si.product_id = NEW.product_id
-        AND si.store_id = NEW.store_id;
+    UPDATE store_inventory
+    SET stock_quantity = store_inventory.stock_quantity - NEW.quantity
+    WHERE store_inventory.product_id = NEW.product_id
+        AND store_inventory.store_id = NEW.store_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION fn_increase_stock_due_to_order_completion()
+RETURNS TRIGGER AS
+$$ 
+BEGIN 
+    UPDATE store_inventory
+    SET stock_quantity = store_inventory.stock_quantity + NEW.quantity
+    WHERE store_inventory.product_id = NEW.product_id
+        AND store_inventory.store_id = NEW.store_id;
+
+    RETURN NEW;
+END; 
+$$ LANGUAGE plpgsql;  
+
+CREATE OR REPLACE FUNCTION fn_stock_reorder()
+RETURNS TRIGGER AS 
+$$
+BEGIN 
+    INSERT INTO orders (store_id, product_id, quantity, order_status)
+    VALUES (NEW.store_id, NEW.product_id, 100, 'ORDER SENT');
+
+    RETURN NEW; 
+END;
+$$ LANGUAGE plpgsql; 
+
+CREATE OR REPLACE FUNCTION fn_all_member_points()
+RETURNS TRIGGER AS 
+$$
+BEGIN 
+    UPDATE all_members
+    SET points_balance = FLOOR(NEW.total_amount/25) + points_balance
+    WHERE member_id = NEW.member_id
+        AND phone_number = NEW.phone_number;
 
     RETURN NEW;
 END;
