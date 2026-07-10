@@ -19,9 +19,9 @@ INSERT INTO suppliers (supplier_id, company_name, contact_name, phone_number)
 VALUES
 (1, 'Thai Snack Supplier Co.', 'Somchai', '0811111111');
 
-INSERT INTO orders (order_id, store_id, product_id, quantity)
+INSERT INTO orders (order_id, store_id, product_id, quantity, order_status)
 VALUES
-(1, 1, 1, 50);
+(1, 1, 1, 50, 'ORDER SENT');
 
 INSERT INTO deliveries
 (delivery_id, store_id, supplier_id, delivery_date, driver_name, driver_phone, license_plate)
