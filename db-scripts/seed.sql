@@ -19,7 +19,8 @@ INSERT INTO suppliers (supplier_id, company_name, contact_name, phone_number)
 VALUES
 (1, 'Thai Snack Supplier Co.', 'Somchai', '0811111111');
 
-INSERT INTO orders (order_id, store_id, product_id, quantity, order_status)
+INSERT INTO orders
+(order_id, store_id, product_id, quantity, order_status)
 VALUES
 (1, 1, 1, 50, 'ORDER SENT');
 
@@ -39,12 +40,12 @@ VALUES
 
 INSERT INTO employees (employee_id, store_id, employee_name, role_type)
 VALUES
-(1, 1, 'Ploy', 'Cashier');
+(1, 1, 'Ploy', 'CASHIER');
 
 INSERT INTO sales_transactions
 (transaction_id, store_id, member_id, employee_id, total_amount, transaction_date, payment_method)
 VALUES
-(1, 1, 1, 1, 59.00, CURRENT_TIMESTAMP, 'Cash');
+(1, 1, 1, 1, 59.00, CURRENT_TIMESTAMP, 'CASH');
 
 INSERT INTO transaction_items
 (transaction_id, product_id, expiration_date, quantity, unit_price)
@@ -54,9 +55,9 @@ VALUES
 INSERT INTO store_expenses
 (expense_id, store_id, expense_type, amount, expense_date)
 VALUES
-(1, 1, 'Electricity', 500.00, CURRENT_DATE);
+(1, 1, 'UTILITIES', 500.00, CURRENT_DATE);
 
 INSERT INTO worker_shifts
 (shift_id, employee_id, store_id, clock_in, clock_out, shift_status)
 VALUES
-(1, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '8 hours', 'Scheduled');
+(1, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '8 hours', 'SCHEDULED');
