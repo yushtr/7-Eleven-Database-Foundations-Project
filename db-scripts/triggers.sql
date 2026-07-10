@@ -1,3 +1,8 @@
+DROP TRIGGER IF EXISTS trg_update_stock ON transaction_items;
+DROP TRIGGER IF EXISTS trg_increase_stock_due_to_order_completion ON orders;
+DROP TRIGGER IF EXISTS trg_stock_reorder ON store_inventory;
+DROP TRIGGER IF EXISTS trg_all_member_points ON sales_transactions;
+
 CREATE TRIGGER trg_update_stock
     AFTER INSERT
     ON transaction_items

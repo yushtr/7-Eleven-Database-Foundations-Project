@@ -179,6 +179,7 @@ CREATE TABLE sales_transactions (
 CREATE TABLE transaction_items (
     transaction_id INT NOT NULL, 
     product_id INT NOT NULL, 
+    store_id INT NOT NULL,
     expiration_date DATE NOT NULL,
     quantity INT NOT NULL, 
     unit_price DECIMAL(10, 2) NOT NULL, 
@@ -189,6 +190,9 @@ CREATE TABLE transaction_items (
         CONSTRAINT fk_transaction_items_product_id
             FOREIGN KEY(product_id)
             REFERENCES products(product_id),
+        CONSTRAINT fk_transaction_items_store_id
+            FOREIGN KEY(store_id)
+            REFERENCES branches(store_id),
         CONSTRAINT chk_positive_quantity CHECK (quantity > 0),
         CONSTRAINT chk_positive_unit_price CHECK (unit_price > 0)
 );

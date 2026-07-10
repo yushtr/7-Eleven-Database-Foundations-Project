@@ -27,9 +27,9 @@ GRANT INSERT, UPDATE ON employees, worker_shifts TO store_manager_role;
 GRANT INSERT ON store_expenses TO store_manager_role;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO corporate_admin_role;
-GRANT SELECT ON ALL VIEWS IN SCHEMA public TO corporate_admin_role;
 
 CREATE USER BKK_REGISTER_01 WITH LOGIN PASSWORD 'pos_terminal_secure_pass_2026';
 CREATE USER branch_manager_01 WITH LOGIN PASSWORD 'manager_auth_secure_pass_2026';
+
 GRANT pos_cashier_role TO BKK_REGISTER_01;
 GRANT store_manager_role TO branch_manager_01;
