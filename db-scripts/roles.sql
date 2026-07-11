@@ -1,3 +1,15 @@
+GRANT pos_cashier_role, store_manager_role, corporate_admin_role TO CURRENT_USER;
+GRANT bkk_register_01, branch_manager_01 TO CURRENT_USER;
+
+DROP OWNED BY bkk_register_01, branch_manager_01;
+DROP USER IF EXISTS bkk_register_01;
+DROP USER IF EXISTS branch_manager_01;
+
+DROP OWNED BY corporate_admin_role, store_manager_role, pos_cashier_role;
+DROP ROLE IF EXISTS corporate_admin_role;
+DROP ROLE IF EXISTS store_manager_role;
+DROP ROLE IF EXISTS pos_cashier_role;
+
 CREATE ROLE pos_cashier_role;
 CREATE ROLE store_manager_role;
 CREATE ROLE corporate_admin_role;
@@ -28,8 +40,8 @@ GRANT INSERT ON store_expenses TO store_manager_role;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO corporate_admin_role;
 
-CREATE USER BKK_REGISTER_01 WITH LOGIN PASSWORD 'pos_terminal_secure_pass_2026';
+CREATE USER bkk_register_01 WITH LOGIN PASSWORD 'pos_terminal_secure_pass_2026';
 CREATE USER branch_manager_01 WITH LOGIN PASSWORD 'manager_auth_secure_pass_2026';
 
-GRANT pos_cashier_role TO BKK_REGISTER_01;
+GRANT pos_cashier_role TO bkk_register_01;
 GRANT store_manager_role TO branch_manager_01;
